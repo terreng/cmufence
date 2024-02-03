@@ -60,7 +60,7 @@ function openHome(dateid) {
 
     gid("container_home").style.display = "none";
 
-    firebase.firestore().collection("fences").orderBy("dateid", "asc").startAt(dateid).limit(1).get().then(function (querySnapshot) {
+    firebase.firestore().collection("fences").orderBy("dateid", "desc").startAt(dateid).limit(1).get().then(function (querySnapshot) {
         
         var fenceinfo = false;
 
@@ -71,6 +71,8 @@ function openHome(dateid) {
         if (fenceinfo) {
 
             gid("container_home").style.display = "block";
+
+            gid("model_container").innerHTML = '<model-viewer src="https://firebasestorage.googleapis.com/v0/b/cmu-fence.appspot.com/o/'+fenceinfo.model+'?alt=media" shadow-intensity="1" camera-controls touch-action="pan-y" max-field-of-view="9deg" min-field-of-view="5deg"></model-viewer>';
 
             let date = parseDateID(fenceinfo.dateid);
             gid("fence_date").innerText = shortmontharray[date[0]] + " " + date[1] + ", 20" + date[2];
