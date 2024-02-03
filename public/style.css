@@ -15,6 +15,7 @@ body {
     width: 100%;
     overflow-x: hidden;
     --divline: #ffffff2e;
+    margin-top: 56px !important;
 }
 
 .material-icons {
@@ -133,6 +134,15 @@ body {
     padding-left: 2px;
 }
 
+.is_today .calb_day {
+    background-color: #c41230;
+    color: white;
+    border-radius: 18px;
+    text-align: center;
+    width: 25px;
+    padding-left: 0px;
+}
+
 .icon_box {
     width: 100%;
     height: calc(100% - 22px);
@@ -157,4 +167,11 @@ body {
 
 #calendar_container {
     border-top: 1px solid var(--divline);
+}
+
+.navbar {
+    position: fixed !important;
+    left: 0;
+    right: 0;
+    top: 0;
 }

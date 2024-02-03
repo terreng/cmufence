@@ -21,6 +21,9 @@ function checkState() {
         openHistory();
         gid("nav_history").classList.add("active");
         gid("container_history").style.display = "block";
+    } else if (document.location.pathname.startsWith("/history/")) {
+        openHistoryDay();
+        gid("nav_history").classList.add("active");
     } else if (document.location.pathname == "/rules") {
         openRules();
         gid("nav_rules").classList.add("active");
@@ -29,6 +32,20 @@ function checkState() {
         openLeaderboard();
         gid("nav_leaderboard").classList.add("active");
         gid("container_leaderboard").style.display = "block";
+    }
+}
+
+function openHistoryDay() {
+    var date = document.location.pathname.split("/")[2];
+    var datearray = date.split("-");
+    var month = datearray[0];
+    var day = datearray[1];
+    var year = datearray[2];
+    var realdate = new Date(year, month - 1, day);
+    if (realdate == "Invalid Date") {
+        window.location = "/history";
+    } else {
+        gid("container_home").style.display = "block";
     }
 }
 
@@ -154,7 +171,7 @@ function renderCalendarMonth() {
 
 		} else {
 
-			pendhtml += '<div id="calendarday_' + cday + '_' + cmonth + '_' + cyear + '" onclick="openCalendarDay(' + cday + ',' + cmonth + ',' + (cyear - 2000) + ')" class="calendar_unit ' + cbd + '"><div class="calb_day">' + cday + '</div><div class="icon_box"></div></div>';
+			pendhtml += '<div id="calendarday_' + cday + '_' + cmonth + '_' + cyear + '" onclick="navigate(\'/history/' + (cmonth + 1) + '-' + cday + '-' + (cyear) + '\')" class="calendar_unit ' + cbd + '"><div class="calb_day">' + cday + '</div><div class="icon_box"></div></div>';
 
 		}
 
