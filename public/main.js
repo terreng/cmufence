@@ -12,9 +12,10 @@ function checkState() {
     gid("container_history").style.display = "none";
     gid("container_rules").style.display = "none";
     gid("container_leaderboard").style.display = "none";
+    gid("container_scan").style.display = "none";
 
     if (document.location.pathname == "/") {
-        openHome();
+        openHome(getDateID(new Date().getMonth(), new Date().getDate(), new Date().getFullYear(), true));
         gid("nav_home").classList.add("active");
         gid("container_home").style.display = "block";
     } else if (document.location.pathname == "/history") {
@@ -32,6 +33,9 @@ function checkState() {
         openLeaderboard();
         gid("nav_leaderboard").classList.add("active");
         gid("container_leaderboard").style.display = "block";
+    } else if (document.location.pathname == "/scan") {
+        openScan();
+        gid("container_scan").style.display = "block";
     }
 }
 
@@ -46,16 +50,62 @@ function openHistoryDay() {
         window.location = "/history";
     } else {
         gid("container_home").style.display = "block";
+        openHome(getDateID(month - 1, day, year, true));
     }
 }
 
-function openHome() {
+var shortmontharray = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+function openHome(dateid) {
+
+    gid("container_home").style.display = "none";
+
+    firebase.firestore().collection("fences").orderBy("dateid", "asc").startAt(dateid).limit(1).get().then(function (querySnapshot) {
+        
+        var fenceinfo = false;
+
+        querySnapshot.forEach(function (doc) {
+            fenceinfo = doc.data();
+        });
+
+        if (fenceinfo) {
+
+            gid("container_home").style.display = "block";
+
+            let date = parseDateID(fenceinfo.dateid);
+            gid("fence_date").innerText = shortmontharray[date[0]] + " " + date[1] + ", 20" + date[2];
+
+            gid("fence_message").innerHTML = htmlescape(fenceinfo.message).replace(/((http(s)?:\/\/.)(www\.)?[-a-zA-Z0-9.]{2,256}\.[a-z]{2,6}\b(([-a-zA-Z0-9@:%_\+.~#?&//=]|(&amp;))*?(?=(?:((\.)|,)(\s|$))|(\s|$))))/gi, function (a) { return '<a href="' + a.replace(/&amp;/g, "&") + '" target="_blank">' + a + '</a>' });
+
+            gid("fence_organization").innerText = fenceinfo.organization;
+
+            gid("painters_list").innerHTML = "";
+
+            firebase.firestore().collection("painters").where("fences", "array-contains", fenceinfo.dateid).get().then(function (querySnapshot) {
+				
+                querySnapshot.forEach(function (doc) {
+                    var painter = doc.data();
+
+                    gid("painters_list").innerHTML += '<a href="/leaderboard/'+doc.id+'" onclick="navigate(\'/leaderboard/'+doc.id+'\'); return false;"><div class="painter"><img src="'+painter.photoURL+'" class="painter_image"><div class="painter_name">'+htmlescape(painter.displayName)+'</div></div></a>';
+                });
+
+			}).catch(function (error) {
+				console.error(error);
+			});
+
+        } else {
+
+        }
+
+    }).catch(function (error) {
+        console.error(error);
+    });
 
 }
 
 function openHistory() {
     var realdate = new Date(Date.now());
-    calendarmonth = realdate.getMonth();
+    calendarmonth = realdate.getMonth()-1;
     calendaryear = realdate.getFullYear();
 
     renderCalendarMonth();
@@ -67,6 +117,14 @@ function openRules() {
 
 function openLeaderboard() {
 
+}
+
+function openScan() {
+    if (firebase.auth().currentUser) {
+
+    } else {
+        navigate("/");
+    }
 }
 
 var calendarmonth;
@@ -210,7 +268,9 @@ function navigate(newlocation) {
 
 function signOut() {//logOut
 	firebase.auth().signOut().then(function () {
-
+        if (document.location.pathname == "/scan") {
+            navigate("/");
+        }
 	}).catch(function (error) {
 
 	})
@@ -244,4 +304,35 @@ function htmlescape(str) {
 	}
 	str = String(str);
 	return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+}
+
+function getDateID(month, day, year, extended) {
+	if (year > 99) { year -= 2000 };
+	if (String(day).length == 1) { day = "0" + String(day) };
+	if (String(month).length == 1) { month = "0" + String(month) };
+	return Number(String(year) + String(month) + String(day)) + (extended ? 20000000 : 0);;
+}
+
+function parseDateID(dateid) {
+	if (!isNaN(Number(dateid))) {
+		var stringid = String(Number(dateid));
+		if (stringid.length == 8) {
+			stringid = stringid.substring(2);
+		}
+		if (stringid.length == 6) {
+			var year = stringid.substring(0, 2);
+			var month = stringid.substring(2, 4);
+			var day = stringid.substring(4, 6);
+			var date = new Date(montharray[Number(month)] + " " + day + " 20" + year);
+			if (date && !isNaN(date)) {
+				return [Number(month), Number(day), Number(year)];
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	} else {
+		return false;
+	}
 }

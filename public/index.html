@@ -23,8 +23,8 @@
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 
 		<link href="https://fonts.googleapis.com/css?family=Material+Icons" rel="stylesheet">
-		<link rel="stylesheet" href="style.css">
-		<script src="main.js"></script>
+		<link rel="stylesheet" href="/style.css">
+		<script src="/main.js"></script>
 	</head>
 	<body data-bs-theme="dark" >
 		<nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -65,7 +65,7 @@
 						<button class="btn btn-outline-light" type="submit" onclick="signIn()">Sign in</button>
 					</div>
 					<div class="d-flex menu_item_hidden" id="scan_fence_button">
-						<button class="btn btn-outline-light" type="submit" onclick="">Scan the fence</button>
+						<button class="btn btn-outline-light" type="submit" onclick="navigate('/scan')">Scan the fence</button>
 					</div>
 				</div>
 			</div>
@@ -76,23 +76,13 @@
 				<img src="/images/fenceplaceholder.jpg" style="width: 100%; margin: 0 auto; max-width: 1500px; display: block;">
 			</div>
 			<div class="home_bottom">
-				<div id="fence_date">Feb 2, 2024</div>
+				<div id="fence_date"></div>
 				<div class="section_title">Message</div>
-				<div id="fence_message">The Activities Board is bringing Audrey Nuna for our winter concert on Friday 2/2 at 8pm in the UC Studio Theater!
-
-This year’s winter headliner is Audrey Nuna! A cool mix of r&b and rap, you won’t want to miss out on this concert. 🎶🎤 Pull up next Friday (2/2) to the CUC Studio Theater. Doors open at 8PM. Make sure to register with the link beloe!
-
-Register: <a href="https://tartanconnect.cmu.edu/otp_signup?module=event&event_id=1928539&private_event=1" target="_blank">https://tartanconnect.cmu.edu/otp_signup?module=event&event_id=1928539&private_event=1</a></div>
+				<div id="fence_message"></div>
 				<div class="section_title">Organization</div>
-				<div id="fence_organization">Activities Board</div>
+				<div id="fence_organization"></div>
 				<div class="section_title">Painters</div>
 				<div id="painters_list">
-					<a href="/leaderboard/tgurule" onclick="navigate('/leaderboard/tgurule'); return false;">
-						<div class="painter">
-							<img src="/images/terren.jpeg" class="painter_image">
-							<div class="painter_name">Terren Gurule</div>
-						</div>
-					</a>
 				</div>
 			</div>
 		</div>
@@ -129,9 +119,14 @@ Register: <a href="https://tartanconnect.cmu.edu/otp_signup?module=event&event_i
 
 		</div>
 
+		<div id="container_scan">
+
+		</div>
+
 		<script src="https://www.gstatic.com/firebasejs/9.14.0/firebase-app-compat.js"></script>
 		<script src="https://www.gstatic.com/firebasejs/9.14.0/firebase-auth-compat.js"></script>
 		<script src="https://www.gstatic.com/firebasejs/9.14.0/firebase-database-compat.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/9.14.0/firebase-firestore-compat.js"></script>
 		<script src="https://www.gstatic.com/firebasejs/9.14.0/firebase-storage-compat.js"></script>
 
 		<script>
