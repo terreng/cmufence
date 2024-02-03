@@ -201,6 +201,10 @@ max-width: 1500px;  */
     position: relative;
 }
 
+#model_container.mobile {
+    padding-top: 40%;
+}
+
 model-viewer {
     width: 100%;
     height: 100%;
@@ -208,4 +212,30 @@ model-viewer {
     top: 0;
     top: 50%;
     transform: translateY(-50%);
+    --progress-bar-color: #ffffffa6;
+}
+
+.page_title {
+    font-size: 32px;
+    padding-top: 30px;
+    font-weight: 500;
+}
+
+.generic_container {
+    margin: 0 auto;
+    width: 100%;
+    max-width: 900px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.fence_rule_title {
+    font-size: 25px;
+    padding-top: 30px;
+    font-weight: 500;
+}
+
+.fence_rule_description {
+    font-size: 20px;
+    padding-top: 10px;
 }

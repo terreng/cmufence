@@ -72,7 +72,11 @@ function openHome(dateid) {
 
             gid("container_home").style.display = "block";
 
-            gid("model_container").innerHTML = '<model-viewer src="https://firebasestorage.googleapis.com/v0/b/cmu-fence.appspot.com/o/'+fenceinfo.model+'?alt=media" shadow-intensity="1" camera-controls touch-action="pan-y" max-field-of-view="9deg" min-field-of-view="5deg"></model-viewer>';
+            gid("model_container").innerHTML = '<model-viewer src="https://firebasestorage.googleapis.com/v0/b/cmu-fence.appspot.com/o/'+fenceinfo.model+'?alt=media" shadow-intensity="1" camera-controls touch-action="pan-y" max-field-of-view="'+(window.innerWidth <= 900 ? 12 : 9)+'deg" min-field-of-view="5deg"></model-viewer>';
+
+            if (window.innerWidth <= 900) {
+                gid("model_container").classList.add("mobile");
+            }
 
             let date = parseDateID(fenceinfo.dateid);
             gid("fence_date").innerText = shortmontharray[date[0]] + " " + date[1] + ", 20" + date[2];
