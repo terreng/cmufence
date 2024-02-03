@@ -324,6 +324,18 @@ function renderCalendarMonth() {
 
     gid("cal_month_inner").innerHTML = pendhtml;
     gid("month_name").innerText = montharray[calendarmonth] + " " + calendaryear;
+
+    firebase.firestore().collection("fences").orderBy("dateid", "asc").startAt(getDateID(startdate[0], startdate[1], startdate[2], true)).endAt(getDateID(enddate[0], enddate[1], enddate[2], true)).get().then(function (querySnapshot) {
+
+        querySnapshot.forEach(function (doc) {
+            var fenceinfo = doc.data();
+            var date = parseDateID(fenceinfo.dateid);
+            gid("calendarday_"+date[1]+"_"+date[0]+"_20"+date[2]).querySelector(".icon_box").innerHTML = '<img src="https://firebasestorage.googleapis.com/v0/b/cmu-fence.appspot.com/o/'+fenceinfo.thumbnail.split("/").join("%2F")+'?alt=media">';
+        });
+
+    }).catch(function (error) {
+        console.error(error);
+    });
 }
 
 function daysInMonth(month, year) {
