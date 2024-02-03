@@ -95,7 +95,27 @@ Register: <a href="https://tartanconnect.cmu.edu/otp_signup?module=event&event_i
 		</div>
 
 		<div id="container_history">
+			<div style="overflow: hidden; padding-top: 5px; padding-bottom: 5px;">
+				<div class="cal_chev"><a href="/history" onclick="calChevPrev(); return false;"><i class="material-icons">chevron_left</i></a></div>
+				
+				<div class="cal_chev" style="float: right;"><a href="/history" onclick="calChevNext(); return false;"><i class="material-icons">chevron_right</i></a></div>
 
+				<div id="month_name"></div>
+			</div>
+			<div id="calendar_container">
+				<div class="equal_grid">
+					<div class="cal_month_row">Sun</div>
+					<div class="cal_month_row">Mon</div>
+					<div class="cal_month_row">Tue</div>
+					<div class="cal_month_row">Wed</div>
+					<div class="cal_month_row">Thu</div>
+					<div class="cal_month_row">Fri</div>
+					<div class="cal_month_row">Sat</div>
+				</div>
+				<div id="cal_month_inner">
+
+				</div>
+			</div>
 		</div>
 
 		<div id="container_leaderboard">
