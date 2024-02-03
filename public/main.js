@@ -17,7 +17,6 @@ function checkState() {
     if (document.location.pathname == "/") {
         openHome(getDateID(new Date().getMonth(), new Date().getDate(), new Date().getFullYear(), true));
         gid("nav_home").classList.add("active");
-        gid("container_home").style.display = "block";
     } else if (document.location.pathname == "/history") {
         openHistory();
         gid("nav_history").classList.add("active");
