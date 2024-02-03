@@ -71,10 +71,20 @@ function openHome(dateid) {
 
             gid("container_home").style.display = "block";
 
-            gid("model_container").innerHTML = '<model-viewer src="https://firebasestorage.googleapis.com/v0/b/cmu-fence.appspot.com/o/'+fenceinfo.model.split("/").join("%2F")+'?alt=media" shadow-intensity="1" camera-controls touch-action="pan-y" max-field-of-view="'+(window.innerWidth <= 900 ? 12 : 9)+'deg" min-field-of-view="5deg"></model-viewer>';
+            if (fenceinfo.image) {
+                gid("fence_image").style.display = "block";
+                gid("fence_image").src = "https://firebasestorage.googleapis.com/v0/b/cmu-fence.appspot.com/o/"+fenceinfo.image.split("/").join("%2F")+'?alt=media';
 
-            if (window.innerWidth <= 900) {
-                gid("model_container").classList.add("mobile");
+                gid("model_container").style.display = "none";
+            } else {
+                gid("fence_image").style.display = "none";
+                gid("model_container").style.display = "";
+
+                gid("model_container").innerHTML = '<model-viewer src="https://firebasestorage.googleapis.com/v0/b/cmu-fence.appspot.com/o/'+fenceinfo.model.split("/").join("%2F")+'?alt=media" shadow-intensity="1" camera-controls touch-action="pan-y" max-field-of-view="'+(window.innerWidth <= 900 ? 12 : 9)+'deg" min-field-of-view="5deg"></model-viewer>';
+
+                if (window.innerWidth <= 900) {
+                    gid("model_container").classList.add("mobile");
+                }
             }
 
             let date = parseDateID(fenceinfo.dateid);
