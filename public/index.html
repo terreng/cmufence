@@ -29,26 +29,26 @@
 	<body data-bs-theme="dark" >
 		<nav class="navbar navbar-expand-lg bg-body-tertiary">
 			<div class="container-fluid">
-				<a class="navbar-brand" href="/" onclick="navigate('/'); return false;">
+				<a class="navbar-brand" href="/" onclick="navigate('/'); toggleNav(); return false;">
 					<img src="/images/logo.svg" alt="Logo" width="24" height="24" class="d-inline-block align-text-top">
 					CMU Fence
 				</a>
-				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" id="toggle_nav_button">
 				<span class="navbar-toggler-icon"></span>
 				</button>
 				<div class="collapse navbar-collapse" id="navbarSupportedContent">
 					<ul class="navbar-nav ms-auto mb-2 mb-lg-0" style="margin-right: 10px;">
 						<li class="nav-item">
-						<a id="nav_home" class="nav-link" href="/" onclick="navigate('/'); return false;">Today's Fence</a>
+						<a id="nav_home" class="nav-link" href="/" onclick="navigate('/'); toggleNav(); return false;">Today's Fence</a>
 						</li>
 						<li class="nav-item">
-						<a id="nav_history" class="nav-link" href="/history" onclick="navigate('/history'); return false;">Fence History</a>
+						<a id="nav_history" class="nav-link" href="/history" onclick="navigate('/history'); toggleNav(); return false;">Fence History</a>
 						</li>
 						<li class="nav-item">
-						<a id="nav_leaderboard" class="nav-link" href="/leaderboard" onclick="navigate('/leaderboard'); return false;">Leaderboard</a>
+						<a id="nav_leaderboard" class="nav-link" href="/leaderboard" onclick="navigate('/leaderboard'); toggleNav(); return false;">Leaderboard</a>
 						</li>
 						<li class="nav-item">
-						<a id="nav_rules" class="nav-link" href="/rules" onclick="navigate('/rules'); return false;">Fence Rules</a>
+						<a id="nav_rules" class="nav-link" href="/rules" onclick="navigate('/rules'); toggleNav(); return false;">Fence Rules</a>
 						</li>
 						<li class="nav-item dropdown menu_item_hidden" id="account_menu">
 							<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" id="account_display_name">

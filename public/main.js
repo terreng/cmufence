@@ -82,11 +82,21 @@ function openHome(dateid) {
             gid("painters_list").innerHTML = "";
 
             firebase.firestore().collection("painters").where("fences", "array-contains", fenceinfo.dateid).get().then(function (querySnapshot) {
+
+                var found_painters = [];
 				
                 querySnapshot.forEach(function (doc) {
                     var painter = doc.data();
 
+                    found_painters.push(doc.id);
+
                     gid("painters_list").innerHTML += '<a href="/leaderboard/'+doc.id+'" onclick="navigate(\'/leaderboard/'+doc.id+'\'); return false;"><div class="painter"><img src="'+painter.photoURL+'" class="painter_image"><div class="painter_name">'+htmlescape(painter.displayName)+'</div></div></a>';
+                });
+
+                fenceinfo.painters.filter(function (a) { return found_painters.indexOf(a) == -1 }).forEach(function (painterid) {
+
+                    gid("painters_list").innerHTML += '<a href="/leaderboard/'+painterid+'" onclick="navigate(\'/leaderboard/'+painterid+'\'); return false;"><div class="painter"><img src="/images/placeholderpfp.jpg" class="painter_image"><div class="painter_name">'+htmlescape(painterid)+'</div></div></a>';
+
                 });
 
 			}).catch(function (error) {
@@ -335,4 +345,10 @@ function parseDateID(dateid) {
 	} else {
 		return false;
 	}
+}
+
+function toggleNav() {
+    if (window.innerWidth <= 992) {
+        gid("toggle_nav_button").click();
+    }
 }

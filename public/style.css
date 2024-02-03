@@ -79,6 +79,7 @@ body {
 
 #fence_message {
     white-space: pre-wrap;
+    word-wrap: break-word;
 }
 
 #calendar_container {
