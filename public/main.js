@@ -72,7 +72,7 @@ function openHome(dateid) {
 
             gid("container_home").style.display = "block";
 
-            gid("model_container").innerHTML = '<model-viewer src="https://firebasestorage.googleapis.com/v0/b/cmu-fence.appspot.com/o/'+fenceinfo.model+'?alt=media" shadow-intensity="1" camera-controls touch-action="pan-y" max-field-of-view="'+(window.innerWidth <= 900 ? 12 : 9)+'deg" min-field-of-view="5deg"></model-viewer>';
+            gid("model_container").innerHTML = '<model-viewer src="https://firebasestorage.googleapis.com/v0/b/cmu-fence.appspot.com/o/'+fenceinfo.model.split("/").join("%2F")+'?alt=media" shadow-intensity="1" camera-controls touch-action="pan-y" max-field-of-view="'+(window.innerWidth <= 900 ? 12 : 9)+'deg" min-field-of-view="5deg"></model-viewer>';
 
             if (window.innerWidth <= 900) {
                 gid("model_container").classList.add("mobile");
@@ -81,33 +81,49 @@ function openHome(dateid) {
             let date = parseDateID(fenceinfo.dateid);
             gid("fence_date").innerText = shortmontharray[date[0]] + " " + date[1] + ", 20" + date[2];
 
-            gid("fence_message").innerHTML = htmlescape(fenceinfo.message).replace(/((http(s)?:\/\/.)(www\.)?[-a-zA-Z0-9.]{2,256}\.[a-z]{2,6}\b(([-a-zA-Z0-9@:%_\+.~#?&//=]|(&amp;))*?(?=(?:((\.)|,)(\s|$))|(\s|$))))/gi, function (a) { return '<a href="' + a.replace(/&amp;/g, "&") + '" target="_blank">' + a + '</a>' });
+            gid("fence_message").innerHTML = htmlescape(fenceinfo.message || "No message").replace(/((http(s)?:\/\/.)(www\.)?[-a-zA-Z0-9.]{2,256}\.[a-z]{2,6}\b(([-a-zA-Z0-9@:%_\+.~#?&//=]|(&amp;))*?(?=(?:((\.)|,)(\s|$))|(\s|$))))/gi, function (a) { return '<a href="' + a.replace(/&amp;/g, "&") + '" target="_blank">' + a + '</a>' });
 
-            gid("fence_organization").innerText = fenceinfo.organization;
+            gid("fence_organization").innerText = fenceinfo.organization || "None";
 
             gid("painters_list").innerHTML = "";
 
-            firebase.firestore().collection("painters").where("fences", "array-contains", fenceinfo.dateid).get().then(function (querySnapshot) {
+            fenceinfo.painters.forEach(function (painterid) {
 
-                var found_painters = [];
+                firebase.firestore().collection("painters").doc(painterid).get().then(function (doc) {
+
+                    if (doc.exists) {
+                        gid("painters_list").innerHTML += '<a href="/leaderboard/'+doc.id+'" onclick="navigate(\'/leaderboard/'+doc.id+'\'); return false;"><div class="painter"><img src="'+doc.data().photoURL+'" class="painter_image"><div class="painter_name">'+htmlescape(doc.data().displayName)+'</div></div></a>';
+                    } else {
+                        gid("painters_list").innerHTML += '<a href="/leaderboard/'+painterid+'" onclick="navigate(\'/leaderboard/'+painterid+'\'); return false;"><div class="painter"><img src="/images/placeholderpfp.jpg" class="painter_image"><div class="painter_name">'+htmlescape(painterid)+'</div></div></a>';
+                    }
+
+                }).catch(function (error) {
+                    console.error(error);
+                });
+
+            });
+
+            // firebase.firestore().collection("painters").where("fences", "array-contains", fenceinfo.dateid).get().then(function (querySnapshot) {
+
+            //     var found_painters = [];
 				
-                querySnapshot.forEach(function (doc) {
-                    var painter = doc.data();
+            //     querySnapshot.forEach(function (doc) {
+            //         var painter = doc.data();
 
-                    found_painters.push(doc.id);
+            //         found_painters.push(doc.id);
 
-                    gid("painters_list").innerHTML += '<a href="/leaderboard/'+doc.id+'" onclick="navigate(\'/leaderboard/'+doc.id+'\'); return false;"><div class="painter"><img src="'+painter.photoURL+'" class="painter_image"><div class="painter_name">'+htmlescape(painter.displayName)+'</div></div></a>';
-                });
+            //         gid("painters_list").innerHTML += '<a href="/leaderboard/'+doc.id+'" onclick="navigate(\'/leaderboard/'+doc.id+'\'); return false;"><div class="painter"><img src="'+painter.photoURL+'" class="painter_image"><div class="painter_name">'+htmlescape(painter.displayName)+'</div></div></a>';
+            //     });
 
-                fenceinfo.painters.filter(function (a) { return found_painters.indexOf(a) == -1 }).forEach(function (painterid) {
+            //     fenceinfo.painters.filter(function (a) { return found_painters.indexOf(a) == -1 }).forEach(function (painterid) {
 
-                    gid("painters_list").innerHTML += '<a href="/leaderboard/'+painterid+'" onclick="navigate(\'/leaderboard/'+painterid+'\'); return false;"><div class="painter"><img src="/images/placeholderpfp.jpg" class="painter_image"><div class="painter_name">'+htmlescape(painterid)+'</div></div></a>';
+            //         gid("painters_list").innerHTML += '<a href="/leaderboard/'+painterid+'" onclick="navigate(\'/leaderboard/'+painterid+'\'); return false;"><div class="painter"><img src="/images/placeholderpfp.jpg" class="painter_image"><div class="painter_name">'+htmlescape(painterid)+'</div></div></a>';
 
-                });
+            //     });
 
-			}).catch(function (error) {
-				console.error(error);
-			});
+			// }).catch(function (error) {
+			// 	console.error(error);
+			// });
 
         } else {
 
@@ -136,11 +152,43 @@ function openLeaderboard() {
 }
 
 function openScan() {
-    if (firebase.auth().currentUser) {
+    // if (firebase.auth().currentUser) {
 
-    } else {
-        navigate("/");
+    // } else {
+    //     navigate("/");
+    // }
+    if (firebase.auth().currentUser && gid("fence_painters").value == "") {
+        gid("fence_painters").value = firebase.auth().currentUser.email.split("@")[0]+"\n";
     }
+}
+
+function uploadFence() {
+    gid("submit_button").style.display = "none";
+    gid("submit_button_loading").style.display = "";
+
+    let filename = firebase.auth().currentUser.uid+"/"+Date.now()+".glb";
+
+    firebase.storage().ref().child(filename).put(gid("fence_model").files[0]).then(function(snapshot) {
+        firebase.firestore().collection("fences").add({
+            dateid: getDateID(new Date().getMonth(), new Date().getDate(), new Date().getFullYear(), true),
+            message: gid("message").value || null,
+            organization: gid("organization_name").value || null,
+            model: filename,
+            painters: gid("fence_painters").value.split("\n").filter(function(a) { return a.length > 0 })
+        }).then(function() {
+            navigate("/");
+            gid("fence_model").value = "";
+            gid("message").value = "";
+            gid("organization_name").value = "";
+            gid("fence_painters").value = "";
+            gid("submit_button").style.display = "";
+            gid("submit_button_loading").style.display = "none";
+        }).catch(function(error) {
+            console.error(error);
+        });
+    }).catch(function(error) {
+        console.error(error);
+    });
 }
 
 var calendarmonth;

@@ -67,7 +67,7 @@
 						<button class="btn btn-outline-light" type="submit" onclick="signIn()">Sign in</button>
 					</div>
 					<div class="d-flex menu_item_hidden" id="scan_fence_button">
-						<button class="btn btn-outline-light" type="submit" onclick="navigate('/scan')">Scan the fence</button>
+						<button class="btn btn-outline-light" type="submit" onclick="navigate('/scan'); toggleNav(); return false;">Scan the fence</button>
 					</div>
 				</div>
 			</div>
@@ -138,6 +138,41 @@
 
 		<div id="container_scan" class="generic_container">
 			<div class="page_title">Scan the fence</div>
+
+			<div class="fence_rule_description">First, scan the fence using the Polycam app (<a href="https://apps.apple.com/us/app/polycam-3d-scanner-lidar-360/id1532482376" target="_blank">iPhone</a>, <a href="https://play.google.com/store/apps/details?id=ai.polycam" target="_blank">Android</a>). Then, export it as a GLTF model and upload it below:</div>
+
+			<form onsubmit="uploadFence(); event.preventDefault();"> 
+
+				<div class="mb-3" style="padding-top: 20px;">
+					<label for="fence_model" class="form-label">Fence 3D Model (glb/glTF)</label>
+					<input class="form-control" type="file" id="fence_model" required>
+				</div>
+
+				<div class="mb-3">
+					<label for="organization_name" class="form-label">Organization Name</label>
+					<input type="text" class="form-control" id="organization_name" placeholder="N/A">
+				</div>
+
+				<div class="mb-3">
+					<label for="message" class="form-label">Fence Description / Message</label>
+					<textarea class="form-control" id="message" rows="5" required></textarea>
+					<div class="form-text">You can include links.</div>
+				</div>
+
+				<div class="mb-3">
+					<label for="painters" class="form-label">Painter Andrew IDs</label>
+					<textarea class="form-control" id="fence_painters" rows="5"></textarea>
+					<div class="form-text">Enter one Andrew ID per line.</div>
+				</div>
+
+				<button type="submit" class="btn btn-primary" id="submit_button">Submit</button>
+
+				<button class="btn btn-primary" type="button" disabled id="submit_button_loading" style="display: none;">
+					<span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+					<span role="status">Submitting...</span>
+				</button>
+
+			</form>
 		</div>
 
 		<script src="https://www.gstatic.com/firebasejs/9.14.0/firebase-app-compat.js"></script>
