@@ -8,6 +8,9 @@
 		<meta http-equiv="Expires" content="0">
 		<title>CMU Fence</title>
 
+		<meta name="title" content="CMU Fence">
+		<meta name="description" content="See the fence at Carnegie Mellon University.">
+
 		<link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
 		<link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
 		<link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
@@ -16,7 +19,7 @@
 		<meta name="msapplication-TileColor" content="#da532c">
 		<meta name="theme-color" content="#ffffff">
 
-		<link href="https://fonts.googleapis.com/css?family=Roboto:400,500,600|Material+Icons" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Material+Icons" rel="stylesheet">
 		<link rel="stylesheet" href="style.css">
 		<script src="main.js"></script>
 
@@ -65,6 +68,44 @@
 			</div>
 		</nav>
 
+		<div id="container_home">
+			<div class="home_top">
+				<img src="/images/fenceplaceholder.jpg" style="width: 100%; margin: 0 auto; max-width: 1500px; display: block;">
+			</div>
+			<div class="home_bottom">
+				<div id="fence_date">Feb 2, 2024</div>
+				<div class="section_title">Message</div>
+				<div id="fence_message">The Activities Board is bringing Audrey Nuna for our winter concert on Friday 2/2 at 8pm in the UC Studio Theater!
+
+This year’s winter headliner is Audrey Nuna! A cool mix of r&b and rap, you won’t want to miss out on this concert. 🎶🎤 Pull up next Friday (2/2) to the CUC Studio Theater. Doors open at 8PM. Make sure to register with the link beloe!
+
+Register: <a href="https://tartanconnect.cmu.edu/otp_signup?module=event&event_id=1928539&private_event=1" target="_blank">https://tartanconnect.cmu.edu/otp_signup?module=event&event_id=1928539&private_event=1</a></div>
+				<div class="section_title">Organization</div>
+				<div id="fence_organization">Activities Board</div>
+				<div class="section_title">Painters</div>
+				<div id="painters_list">
+					<a href="/leaderboard/tgurule" onclick="navigate('/leaderboard/tgurule'); return false;">
+						<div class="painter">
+							<img src="/images/terren.jpeg" class="painter_image">
+							<div class="painter_name">Terren Gurule</div>
+						</div>
+					</a>
+				</div>
+			</div>
+		</div>
+
+		<div id="container_history">
+
+		</div>
+
+		<div id="container_leaderboard">
+
+		</div>
+
+		<div id="container_rules">
+
+		</div>
+
 		<script src="https://www.gstatic.com/firebasejs/9.14.0/firebase-app-compat.js"></script>
 		<script src="https://www.gstatic.com/firebasejs/9.14.0/firebase-auth-compat.js"></script>
 		<script src="https://www.gstatic.com/firebasejs/9.14.0/firebase-database-compat.js"></script>
@@ -81,10 +122,10 @@
 			};
 			firebase.initializeApp(config);
 
-			if ('scrollRestoration' in history) {
-				// Back off, browser, I got this...
-				history.scrollRestoration = 'manual';//'manual' we generally want this, only disable when we dont
-			}
+			// if ('scrollRestoration' in history) {
+			// 	// Back off, browser, I got this...
+			// 	history.scrollRestoration = 'manual';//'manual' we generally want this, only disable when we dont
+			// }
 
 			checkState();
 		</script>
