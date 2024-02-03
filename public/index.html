@@ -36,16 +36,16 @@
 				<div class="collapse navbar-collapse" id="navbarSupportedContent">
 					<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
 						<li class="nav-item">
-						<a class="nav-link active" aria-current="page" href="/">Today's Fence</a>
+						<a id="nav_home" class="nav-link" href="/" onclick="navigate('/'); return false;">Today's Fence</a>
 						</li>
 						<li class="nav-item">
-						<a class="nav-link" href="/history">Fence History</a>
+						<a id="nav_history" class="nav-link" href="/history" onclick="navigate('/history'); return false;">Fence History</a>
 						</li>
 						<li class="nav-item">
-						<a class="nav-link" href="/rules">Fence Rules</a>
+						<a id="nav_leaderboard" class="nav-link" href="/leaderboard" onclick="navigate('/leaderboard'); return false;">Leaderboard</a>
 						</li>
 						<li class="nav-item">
-						<a class="nav-link" href="/leaderboard">Leaderboard</a>
+						<a id="nav_rules" class="nav-link" href="/rules" onclick="navigate('/rules'); return false;">Fence Rules</a>
 						</li>
 						<li class="nav-item dropdown">
 							<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -80,6 +80,13 @@
 				appId: "1:83881276065:web:5c6b68439a54ef2acb36e0"
 			};
 			firebase.initializeApp(config);
+
+			if ('scrollRestoration' in history) {
+				// Back off, browser, I got this...
+				history.scrollRestoration = 'manual';//'manual' we generally want this, only disable when we dont
+			}
+
+			checkState();
 		</script>
 	</body>
 </html>
