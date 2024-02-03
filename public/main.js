@@ -207,3 +207,41 @@ function navigate(newlocation) {
     history.pushState(undefined, undefined, newlocation);
 	checkState();
 }
+
+function signOut() {//logOut
+	firebase.auth().signOut().then(function () {
+
+	}).catch(function (error) {
+
+	})
+}
+
+function signIn() {
+    var provider = new firebase.auth.GoogleAuthProvider();
+
+    firebase.auth()
+    .signInWithPopup(provider)
+    .then((result) => {
+    
+    }).catch((error) => {
+
+        console.error(error);
+
+        if (error.message.indexOf("auth/error-code:-47") > -1) {
+            
+            setTimeout(function() {
+                alert("You must sign in with your Andrew email address");
+            }, 500);
+
+        }
+        
+    });
+}
+
+function htmlescape(str) {
+	if (str == undefined) {
+		return str;
+	}
+	str = String(str);
+	return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+}
